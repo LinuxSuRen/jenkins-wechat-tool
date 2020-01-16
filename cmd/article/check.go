@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"strings"
 )
 
 func NewCheckCommand(commonOpts *common.Options) (cmd *cobra.Command) {
@@ -13,6 +14,11 @@ func NewCheckCommand(commonOpts *common.Options) (cmd *cobra.Command) {
 		Use: "check",
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			mkFile := args[0]
+
+			if strings.ToLower(mkFile) != mkFile {
+				err = fmt.Errorf("alphabetic characters of filename should keep lowercase")
+				return
+			}
 
 			var data []byte
 			if data, err = ioutil.ReadFile(mkFile); err != nil {
